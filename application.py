@@ -24,70 +24,84 @@ class point(object):#_motor
         os.system("cls")
         os.system("clear")
         ans = "yes" #respuesta
-        while ans != "no":
-
+        while ans != "no": 
             print "Welcome\n "
             print "Search Engine \n"
+            try:
+                self.web = raw_input("insert first URL: ")
+                self.web2 = raw_input("insert second URL: ")
+                self.word = raw_input("insert the word that you want search: ")
 
-            self.web = raw_input("insert first URL: ")
-            self.web2 = raw_input("insert second URL: ")
-            self.word = raw_input("insert the word that you want search: ")
+                self.ser1 = urllib.urlopen(self.web)
+                self.res1 = self.ser1.read()
+                self.cont1 = len(re.findall(self.word, self.res1))
 
-            self.ser1 = urllib.urlopen(self.web)
-            self.res1 = self.ser1.read()
-            self.cont1 = len(re.findall(self.word, self.res1))
+                self.ser2 = urllib.urlopen(self.web2)
+                self.res2 = self.ser2.read()
+                self.cont2 = len(re.findall(self.word, self.res2))
 
-            self.ser2 = urllib.urlopen(self.web2)
-            self.res2 = self.ser2.read()
-            self.cont2 = len(re.findall(self.word, self.res2))
+                if self.cont1 > self.cont2:
+                    print "\nthe word that you inserted is: " + self.word
+                    print "it shows : " + str(self.cont1) + " times in the fisrs URL"
+                    print "it shows : " + str(self.cont2) + " times in the second URL"
+                    print "this is the page where the word shows most times: " + self.web + "\n"
+                    break
 
-            if self.cont1 > self.cont2:
-                print "\nthe word that you inserted is: " + self.word
-                print "it shows : " + str(self.cont1) + " times in the fisrs URL"
-                print "it shows : " + str(self.cont2) + " times in the second URL"
-                print "this is the page where the word shows most times: " + self.web + "\n"
-                break
+                elif self.cont2 > self.cont1:
+                    print "\nthe word that you inserted is: " + self.word
+                    print "it shows : " + str(self.cont1) + " times in the first URL"
+                    print "it shows : " + str(self.cont2) + " times in the second URL"
+                    print "this is the page where the word shows most times: " + self.web2 + "\n"
+                    break
 
-            elif self.cont2 > self.cont1:
-                print "\nthe word that you inserted is: " + self.word
-                print "it shows : " + str(self.cont1) + " times in the first URL"
-                print "it shows : " + str(self.cont2) + " times in the second URL"
-                print "this is the page where the word shows most times: " + self.web2 + "\n"
-                break
+                elif (self.cont1 > 0) and (self.cont2 > 0) and self.cont1 == self.cont2:
+                    print "\nthe word that you inserted is: " + self.word
+                    print "it shows : " + str(self.cont1) + " times in the first URL"
+                    print "it shows : " + str(self.cont2) + " times in the second URL"
+                    print "all pages shows the same quantity"
+                    break
 
-            elif (self.cont1 > 0) and (self.cont2 > 0) and self.cont1 == self.cont2:
-                print "\nthe word that you inserted is: " + self.word
-                print "it shows : " + str(self.cont1) + " times in the first URL"
-                print "it shows : " + str(self.cont2) + " times in the second URL"
-                print "all pages shows the same quantity"
-                break
+                elif (self.cont1 == 0) and (self.cont2 == 0): 
+                    print "\ncan't find the word"
+                    print "all pages shows the same quantity\n"
+                    break
+            except IOError, e:
+           	    print "this is an invalid URL"
+            raw_input("press enter to continue...")
+                
+            self.limp()
+            self.again()    
 
-            elif (self.cont1 == 0) and (self.cont2 == 0): 
-                print "\ncan't find the word"
-                print "all pages shows the same quantity\n"
-                break
-
-      	self.again()    
     
     def again(self):
-			ans = raw_input("do you want to insert another word? y/n :")
-			if type(ans) != int:
-				ans = str(ans)
-				if ans == "y" or ans == "yes":
-					self.buscar()
-				elif ans == "n" or ans == "no":
-					self.menu()
-			else:
-				print"ingresa bien las cosas"
-				os.system("cls")
-				os.system("clear")
+        while True:	
+            ans = raw_input("do you want to insert another word? y/n :")
+            ans.isalpha()
+            ans = ans.lower()
+            self.limp()
+            #print type(ans)
+            if type(ans) != int:
+                ans = str(ans)
+                if ans == "y" or ans == "yes":
+                    self.buscar()
+                elif ans == "n" or ans == "no":
+                    self.limp()
+                    self.menu()
 
+            else:
+                print"insert a valid option"
+                os.system("cls")
+                os.system("clear")
 
+    def limp(self):
+        os.system("cls")
+        os.system("clear")
+    
     def menu(self):
         self.op = 0
         while True:
             while (self.op != 1) or (self.op != 2):
-            	print "    Search Engine"
+                print "    Search Engine"
                 print "1) Find word"
                 print "2) Exit"
 
