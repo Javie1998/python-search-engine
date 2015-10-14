@@ -6,81 +6,86 @@ import sys
 import time
 import urllib
 
+
 #cont = 0
-class point(object):#_motor
+
+class _point(object):
+    """the first part of the program"""
+    def limp(self):
+        """this function serves to clean the window"""
+        if sys.platform == "win32":
+            os.system("cls")
+        else:
+            os.system("reset")
+
     def __init__(self):
-        self.web = "" #pagina1
-        self.web2 = "" #pagina2
-        self.word = "" #palabra
-        self.ser1 = "" #bus1
-        self.ser2 = "" #bus2
-        self.res1 = ""
-        self.res2 = ""
+        """here only declare the global variables"""
         self.cont1 = 0
         self.cont2 = 0
-        self.op = 0 #oportunidad
+        self.slec = 0
 
-    def buscar(self):#busqueda
-        os.system("cls")
-        os.system("clear")
-        ans = "yes" #respuesta
-        while ans != "no": 
-            print "Welcome\n "
-            print "Search Engine \n"
+    def buscar(self):
+        """this function will search the word in both URL"""
+        web = ""
+        web2 = ""
+        word = ""
+        ser1 = ""
+        ser2 = ""
+        res1 = ""
+        res2 = ""
+        self.limp()
+        ans = "yes"
+        while ans != "no":
             try:
-                self.web = raw_input("insert first URL: ")
-                self.web2 = raw_input("insert second URL: ")
-                self.word = raw_input("insert the word that you want search: ")
-
-                self.ser1 = urllib.urlopen(self.web)
-                self.res1 = self.ser1.read()
-                self.cont1 = len(re.findall(self.word, self.res1))
-
-                self.ser2 = urllib.urlopen(self.web2)
-                self.res2 = self.ser2.read()
-                self.cont2 = len(re.findall(self.word, self.res2))
-
-                if self.cont1 > self.cont2:
-                    print "\nthe word that you inserted is: " + self.word
+                web = raw_input("insert first URL: ")
+                web2 = raw_input("insert second URL: ")
+                word = raw_input("insert the word that you want search: ")
+                ser1 = urllib.urlopen(web)
+                res1 = ser1.read()
+                self.cont1 = len(re.findall(word, res1))
+                ser2 = urllib.urlopen(web2)
+                res2 = ser2.read()
+                self.cont2 = len(re.findall(word, res2))
+                if word == "":
+                    print "you have to insert some word"
+                elif word == "":
+                    print word.isspace()
+                elif self.cont1 > self.cont2:
+                    print "\nthe word that you inserted is: " + word
                     print "it shows : " + str(self.cont1) + " times in the fisrs URL"
                     print "it shows : " + str(self.cont2) + " times in the second URL"
-                    print "this is the page where the word shows most times: " + self.web + "\n"
+                    print "this is the page where the word shows most times: " + web + "\n"
                     break
-
                 elif self.cont2 > self.cont1:
-                    print "\nthe word that you inserted is: " + self.word
+                    print "\nthe word that you inserted is: " + word
                     print "it shows : " + str(self.cont1) + " times in the first URL"
                     print "it shows : " + str(self.cont2) + " times in the second URL"
-                    print "this is the page where the word shows most times: " + self.web2 + "\n"
+                    print "this is the page where the word shows most times: " + web2 + "\n"
                     break
-
                 elif (self.cont1 > 0) and (self.cont2 > 0) and self.cont1 == self.cont2:
-                    print "\nthe word that you inserted is: " + self.word
+                    print "\nthe word that you inserted is: " + word
                     print "it shows : " + str(self.cont1) + " times in the first URL"
                     print "it shows : " + str(self.cont2) + " times in the second URL"
-                    print "all pages shows the same quantity"
+                    self.limp()
                     break
-
-                elif (self.cont1 == 0) and (self.cont2 == 0): 
-                    print "\ncan't find the word"
-                    print "all pages shows the same quantity\n"
+                elif (self.cont1 == 0) and (self.cont2 == 0):
                     break
-            except IOError, e:
-           	    print "this is an invalid URL"
+            except IOError:
+                print "this is an invalid URL"
             raw_input("press enter to continue...")
-                
+            self.again()
             self.limp()
-            self.again()    
 
-    
     def again(self):
-        while True:	
+        """this function only will ask the user if he wants to insert again other word"""
+        while True:
             ans = raw_input("do you want to insert another word? y/n :")
             ans.isalpha()
             ans = ans.lower()
             self.limp()
             #print type(ans)
-            if type(ans) != int:
+            checktype = type(ans)
+            if checktype != int:
                 ans = str(ans)
                 if ans == "y" or ans == "yes":
                     self.buscar()
@@ -90,50 +95,50 @@ class point(object):#_motor
 
             else:
                 print"insert a valid option"
-                os.system("cls")
-                os.system("clear")
+                self.limp()
+                #os.system("cls")
+                #os.system("clear")
 
-    def limp(self):
-        os.system("cls")
-        os.system("clear")
-    
     def menu(self):
-        self.op = 0
+        """this is the menu of the search engine"""
+        self.limp()
+        selec = 0
         while True:
-            while (self.op != 1) or (self.op != 2):
+            while (selec != 1) or (selec != 2):
                 print "    Search Engine"
                 print "1) Find word"
                 print "2) Exit"
 
-                self.op = raw_input("insert an option: ")
+                selec = raw_input("insert an option: ")
                 try:
-                    self.op = int(self.op)
-                    if self.op > 0 and self.op <= 2:
+                    selec = int(selec)
+                    if selec > 0 and selec <= 2:
                         break
                     else:
                         print u"insert a valid option\n"
                         time.sleep(1)
-                        os.system("clear")
+                        self.limp()
+
                 except(RuntimeError, TypeError, NameError, ValueError):
                     print u"insert a valid option\n"
                     time.sleep(1)
-                    os.system("clear")
+                    self.limp()
 
-            if self.op == 1:
-                sta = point()#inicio
+            if selec == 1:
+                sta = _point()#inicio
                 sta.buscar()
 
-            if self.op == 2:
+            if selec == 2:
                 print "coming out ..."
                 time.sleep(2)
-                os.system("clear")
+                self.limp()
                 print "Thanks for visit us"
                 time.sleep(1)
                 sys.exit()
-        self.op = 0
+        selec = 0
         return
 
-START = point()
+START = _point()
 START.menu()
 
 
